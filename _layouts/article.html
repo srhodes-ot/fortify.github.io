@@ -1,5 +1,5 @@
---- 
-layout: container 
+---
+layout: container
 ---
 
 {% assign fortify = page.title | slice: 0,7 | downcase %}
@@ -11,14 +11,14 @@ layout: container
 
 
 <!-- Page Contents -->
-<div class="panel article container">
-    <div class="title-bar pages">
+<div class="panel article container qtm-paper-depth1">
+    <header class="title-bar pages">
             <div class="title">
                 {{title}}
             </div>
-    </div>
-    
-    <div class="content-container"> 
+    </header>
+
+    <article class="content-container">
         {{content}}
-    </div>
+    </article>
 </div>

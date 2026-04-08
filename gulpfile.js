@@ -1,43 +1,81 @@
-var gulp = require('gulp');
-var concat = require('gulp-concat');
+const gulp = require('gulp');
+const concat = require('gulp-concat');
+
+const bsVersion = 4;
+const quantumBasePath = `./node_modules/@micro-focus/quantum-ux-bootstrap/dist`;
+const quantumBsBasePath = `${quantumBasePath}/bootstrap${bsVersion}/css`;
 
 gulp.task('npm-components', function(){
-    gulp.src(['./node_modules/bootstrap/dist/css/bootstrap.min.css',
-             './node_modules/quantum-ux-bootstrap/dist/css/bootstrap.min.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/alert/qtm-bs3-alert.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/breadcrumbs/qtm-bs3-breadcrumbs.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/button/qtm-bs3-button.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/panel/qtm-bs3-panel.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/checkbox/qtm-bs3-checkbox.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/form/qtm-bs3-form.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/input/qtm-bs3-input.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/list/qtm-bs3-list.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/login/qtm-bs3-login.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/modal/qtm-bs3-modal.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/navigation/qtm-bs3-navigation.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/progress/qtm-bs3-progress.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/radio/qtm-bs3-radio.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/slider/qtm-bs3-slider.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/table/qtm-bs3-table.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/tag/qtm-bs3-tag.css',
-             './node_modules/quantum-ux-bootstrap/dist/bootstrap3/css/toolbar/qtm-bs3-toolbar.css',
-             './css/site.css'
-        ]).pipe(concat('styles.css'))
-          .pipe(gulp.dest('./dist/css'));
+  const streams = [];
+  streams.push(
+    gulp.src([
+      // './node_modules/bootstrap/dist/css/bootstrap-reboot.min.css',
+      './node_modules/bootstrap/dist/css/bootstrap.min.css',
+      './node_modules/quantum-ux-bootstrap/dist/css/bootstrap.min.css',
+      ...[
+        'panels',
+        'paper',
+      ].map(component => `${quantumBasePath}/common/css/qtm-${component}.css`),
+      ...[
+        'alert',
+        'breadcrumbs',
+        'button',
+        'panel',
+        'checkbox',
+        'form',
+        'input',
+        'list',
+        'login',
+        'modal',
+        'navigation',
+        'progress',
+        'radio',
+        'slider',
+        'table',
+        'tag',
+        'toolbar',
+      ].map(component => `${quantumBsBasePath}/${component}/qtm-bs${bsVersion}-${component}.css`),
+      './css/site.css'
+    ], { allowEmpty: true }).pipe(concat('styles.css'))
+    .pipe(gulp.dest('./dist/css'))
+  );
 
-        gulp.src([
-            './node_modules/quantum-ux-bootstrap/dist/common/css/qtm-fonts.css'
-        ]).pipe(gulp.dest('./dist/fonts'));
+  streams.push(
+    gulp.src([
+      `${quantumBasePath}/common/css/qtm-fonts.css`
+    ], { allowEmpty: true }).pipe(gulp.dest('./dist/fonts'))
+  );
 
-        gulp.src([
-            './node_modules/quantum-ux-bootstrap/dist/common/css/qtm-icons.css',
-            './node_modules/quantum-ux-bootstrap/dist/common/css/qtm-font-icons.css',
-        ]).pipe(gulp.dest('./dist/icons'));
+  streams.push(
+    gulp.src( `./assets/img/**/*.*`, { encoding: false }).pipe(gulp.dest('./dist/img'))
+  );
 
-        gulp.src([
-            './node_modules/jquery/dist/jquery.min.js',
-        ]).pipe(gulp.dest('./dist/js'));
+  streams.push(
+    gulp.src([
+      `${quantumBasePath}/common/css/qtm-icons.css`,
+      `${quantumBasePath}/common/css/qtm-font-icons.css`,
+    ], { allowEmpty: true }).pipe(gulp.dest('./dist/icons'))
+  );
+
+  streams.push(
+    gulp.src([
+      './node_modules/jquery/dist/jquery.min.js',
+    ], { allowEmpty: true }).pipe(gulp.dest('./dist/js'))
+  );
+
+  // Return a promise that resolves when all streams finish
+  return new Promise(function(resolve, reject){
+    let remaining = streams.length;
+    streams.forEach(function(s){
+      s.on('end', function(){
+        remaining -= 1;
+        if(remaining === 0) resolve();
+      });
+      s.on('error', reject);
+    });
+  });
 });
 
-gulp.task('default',['npm-components']);
+// Gulp 4/5: use series instead of dependency arrays
+gulp.task('default', gulp.series('npm-components'));
 

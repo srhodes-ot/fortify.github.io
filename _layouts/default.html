@@ -1,32 +1,27 @@
---- 
-    layout: container 
+---
+    layout: container
 ---
 
-<div class="title-bar">
-    <div class="title">
+<header class="title-bar">
+    <h1 class="title">
         Fortify Engineering
-    </div>
-</div>
+    </h1>
+</header>
 <div class="container main-list main-blog">
-    {% for page in site.posts %} 
+    {% for page in site.posts %}
     {% capture id %}{{ page.id | remove:'/' | downcase }}{% endcapture %}
     {% if page.type == 'main-blog' %}
-    <div id="{{id}}" class="ui segment p-{{id}}">
-
-        <div class="panel">
-            <div class="badge">
-                <span class="day">{{page.date | date: "%d"}}</span> 
-                <span class="month">{{page.date | date: "%b"}}</span> 
-                <span class="year">{{page.date | date: "%Y"}}</span>
-            </div>
-            <div class="content">
-                <h3>{{ page.title }}</h3>
-                <div>
-                    <p>{{ page.content }}</p>
-                </div>
-            </div>
+    <article id="{{id}}" class="qtm-paper-depth1 panel ui segment p-{{id}}">
+        <div class="badge">
+            <span class="day">{{page.date | date: "%d"}}</span>
+            <span class="month">{{page.date | date: "%b"}}</span>
+            <span class="year">{{page.date | date: "%Y"}}</span>
         </div>
-    </div>
+        <div class="content">
+            <h3>{{ page.title }}</h3>
+            {{ page.content }}
+        </div>
+    </article>
     {% endif %}
     {% endfor %}
 </div>

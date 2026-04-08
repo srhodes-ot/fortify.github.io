@@ -4,15 +4,27 @@
     "author": "Forrest Peterson <Forrest.Peterson@microfocus.com>",
     "description": "The Github Pages site for Fortify open source repos.",
     "scripts": {
-        "gulp": "gulp default"
+        "predev": "npm -s run prebuild",
+        "dev": "concurrently --pad-prefix -c auto -n \"gulp,jekyll\" \"npm -s run watch\" \"bundle exec jekyll serve --livereload --incremental\"",
+        "prebuild": "npm -s run gulp",
+        "build": "bundle exec jekyll build",
+        "gulp": "gulp default",
+        "watch": "node scripts/gulp-watch.mjs",
+        "postinstall": "bundle install --frozen",
+        "audit": "concurrently --pad-prefix -c auto -gq -n \"npm,bundle\" \"npm audit --audit-level moderate\" \"bundle exec bundle-audit check --update\""
     },
     "dependencies": {
-        "@micro-focus/quantum-ux-bootstrap": "1.0.21",
-        "bootstrap": "4.3.1",
-        "jquery": "^3.6.0"
+        "@micro-focus/quantum-ux-bootstrap": "1.0.x",
+        "bootstrap": "4.6.x",
+        "jquery": "3.7.x"
     },
     "devDependencies": {
-        "gulp": "^4.0.2",
+        "chokidar": "^5.0.0",
+        "concurrently": "^9.2.1",
+        "gulp": "^5.0.0",
         "gulp-concat": "2.6.1"
+    },
+    "overrides": {
+        "jquery": "3.7.x"
     }
 }

@@ -1,7 +1,10 @@
-_site
+_site/
+dist/
 .sass-cache
 .jekyll-metadata
 .idea
+.vscode
+.npmrc
 
 node_modules
 bower_components

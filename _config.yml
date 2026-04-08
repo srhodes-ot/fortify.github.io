@@ -1,5 +1,5 @@
 title: Fortify Engineering
-email: 
+email:
 description: > # this means to ignore newlines until "baseurl:"
   Fortify Engineering Github repositories
 future: true
@@ -13,8 +13,14 @@ theme: minima
 gems:
   - jekyll-feed
 exclude:
+  - "**/.*"
   - Gemfile
   - Gemfile.lock
+  - scripts/
+  - gulpfile.js
+  - css/
+  - README.md
+  - "**/package*.json"
 
 #host: https://pages.github.hpe.com/eran-argaman
 

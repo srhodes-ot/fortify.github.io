@@ -15,22 +15,22 @@
 </head>
 
 <body>
-    <div class="navbar navbar-fixed-top">
-        <div class="container-fluid">
-            <object class="mffod-logo" data="{{ site.baseurl }}/dist/img/fortify-icon.svg" type="image/svg+xml"></object>
-            <ul class="nav navbar-nav">
-                <li><a class="item {% if page.url == '/' %} active {% endif %}" href="{{ site.baseurl }}/">Home</a></li>
-                {% for node in site.pages reversed %} {% capture id %}{{ node.id | remove:'/' | downcase }}{% endcapture %}
-                {% if node.layout == 'page' %}
-                <li><a class="item {% if page.url == node.url %} active {% endif %}" href="{{ site.baseurl }}{{node.url}}">{{node.title}}</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+    <nav class="navbar navbar-fixed-top">
+        <a href="/" class="navbar-brand">
+            <img class="mffod-logo" src="{{ site.baseurl }}/dist/img/fortify-icon.svg" alt="Microfocus Logo" width="50" />
+        </a>
+        <div class="navbar-nav">
+            <a class="nav-link item {% if page.url == '/' %} active {% endif %}" href="{{ site.baseurl }}/">Home</a>
+            {% for node in site.pages reversed %} {% capture id %}{{ node.id | remove:'/' | downcase }}{% endcapture %}
+            {% if node.layout == 'page' %}
+            <a class="nav-link item {% if page.url == node.url %} active {% endif %}" href="{{ site.baseurl }}{{node.url}}">{{node.title}}</a>
+                {% endif %}
+            {% endfor %}
         </div>
-    </div>
+    </nav>
 
     <!-- Page Contents -->
-    <div class="content-container"> 
+    <div class="content-container">
         {{content}}
     </div>
     <footer class="footer">
@@ -40,15 +40,25 @@
 <script src="{{ site.baseurl }}/dist/js/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
-        $(window).scroll(function() {    
-                var scroll = $(window).scrollTop();
-                if (scroll >= 10) {
-                    $(".title-bar").addClass("scroller");
-                } else {
-                    $(".title-bar").removeClass("scroller");
-                }
-            });
-    })
+        const $win = $(window);
+        const titlebar = document.querySelector('.title-bar');
+        const navHeight = document.querySelector('.navbar').offsetHeight * 1.618;
+        const scrollerClass = 'scroller';
+
+        function updateScroller() {
+            var scroll = $win.scrollTop();
+            if (scroll > navHeight) {
+                titlebar.classList.add(scrollerClass);
+            } else {
+                titlebar.classList.remove(scrollerClass);
+            }
+        }
+
+        // initial check on page load
+        updateScroller();
+
+        $win.on('scroll', updateScroller);
+    });
 </script>
 
 </html>

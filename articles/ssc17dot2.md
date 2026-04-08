@@ -46,7 +46,7 @@ The following screen captures and table show how SSC configuration using the new
 | Export the configured WAR file. | |
 | Restart the server. | |
 
-![Old vs New SSC configuration]({{ site.baseurl }}/img/ssc_old_vs_new_configuration.png "Comparison of configuration options SSC")
+![Old vs New SSC configuration]({{ site.baseurl }}/dist/img/ssc_old_vs_new_configuration.png "Comparison of configuration options SSC")
 
 ### Maintaining State of Setup Process
 The new Setup page maintains the states of the different configuration steps. Each step is kept in a temporary state on the server and is only committed after the user clicks Finish on the last step. This means that interruption caused by, for example, closing the browser or timing out does not restart the process.
